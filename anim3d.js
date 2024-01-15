@@ -1,4 +1,4 @@
-const model='./assets/hand1.glb'
+const model='./assets/hand2.glb'
 
 import {THREE, vec3} from './threeCustom.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -9,7 +9,7 @@ import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUnifo
 function addLight(color, w, h, power, x, y, z, ro=0) {
 	const light = new THREE.RectAreaLight(color, power, w, h);
 	light.position.set(x,y,z);
-	lights.add(light,  new RectAreaLightHelper( light ));
+	lights.add(light);
 	light.lookAt(0,0,0)
 	light.rotateZ(ro);
 }
@@ -20,7 +20,7 @@ const
 	scene = new THREE.Scene(),
 	material = new THREE.MeshStandardMaterial({
 		color: '#ddd',
-		roughness: .21,
+		roughness: .17,
 		metalness: .99
 	}),
 
@@ -31,9 +31,10 @@ scene.add(hLight, lights);
 RectAreaLightUniformsLib.init();
 
 addLight('#85f', 4, 120, 100, 0, 80, 10, -.3)
-addLight('#0ff', 190, 4, 14, 70, 80, -190, .3)
+addLight('#f3a', 38, 160, .5, 150, 70, 80, 1.7)
+addLight('#0ff', 190, 4, 20, 70, 80, -190, .3)
 addLight('#9f3', 100, 30, 15, 70, -80, 20, -.2)
-addLight('#f20', 20, 130, 15, -90, 30, -60,.3)
+addLight('#f30', 20, 130, 15, -90, 30, -60,.3)
 
 canvas.className = 'anim3d'
 document.body.prepend(canvas);
