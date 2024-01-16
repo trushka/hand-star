@@ -98,6 +98,6 @@ onmousemove=e=>{
     }
 }
 onwheel=e=>{
-	camera.zoom *= 1 + e.deltaY*.001;
+	camera.zoom *= 1 - e.deltaY*.001;
 	camera.updateProjectionMatrix()
 }
