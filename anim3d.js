@@ -7,8 +7,8 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
 function addLight(color, w, h, power, x, y, z, ro=0) {
-	const light = new THREE.RectAreaLight(color, power, w, h);
-	light.position.set(x,y,z);
+	const light = new THREE.RectAreaLight(color, power, w*10, h*10);
+	light.position.set(x,y,z).multiplyScalar(10);
 	lights.add(light);
 	light.lookAt(0,0,0)
 	light.rotateZ(ro);
@@ -85,3 +85,19 @@ function anim(t) {
 	renderer.render(scene, camera)
 }
 
+//ajustment
+onmousemove=e=>{
+    if (e.which==1) {
+        hand.rotation.x += e.movementY*.01
+        hand.rotation.y += e.movementX*.01
+    }
+    if (e.which>1) {
+        hand.position.x += e.movementX*.03
+        hand.position.z += e.movementY*.03*(4-e.which)
+        if (e.which ==3) hand.position.y -= e.movementY*.03
+    }
+}
+onwheel=e=>{
+	camera.zoom *= 1 + e.deltaY*.001;
+	camera.updateProjectionMatrix()
+}
