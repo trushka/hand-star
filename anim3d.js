@@ -7,8 +7,8 @@ import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
 function addLight(color, w, h, power, x, y, z, ro=0) {
-	const light = new THREE.RectAreaLight(color, power, w*10, h*10);
-	light.position.set(x,y,z).multiplyScalar(10);
+	const light = new THREE.RectAreaLight(color, power*1.6, w*3, h*3);
+	light.position.set(x,y,z).multiplyScalar(3);
 	lights.add(light);
 	light.lookAt(0,0,0)
 	light.rotateZ(ro);
@@ -19,15 +19,18 @@ const
 	camera=new THREE.PerspectiveCamera( 40, 1, .1, 1000 ),
 	scene = new THREE.Scene(),
 	material = new THREE.MeshStandardMaterial({
-		color: '#ddd',
+		color: '#fff',
 		roughness: .17,
-		metalness: .99
+		metalness: .997
 	}),
+	{PI, cos, sin}=Math,
 
 	lights = new THREE.Group(),
-	hLight = new THREE.HemisphereLight('#eef', '#030301', 1);
+	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
 scene.add(hLight, lights);
+hLight.position.set(0, -2.5, 3).normalize()
+
 RectAreaLightUniformsLib.init();
 
 addLight('#85f', 4, 120, 100, 0, 80, 10, -.3)
@@ -35,6 +38,12 @@ addLight('#f3a', 38, 160, .5, 150, 70, 80, 1.7)
 addLight('#0ff', 190, 4, 20, 70, 80, -190, .3)
 addLight('#9f3', 100, 30, 15, 70, -80, 20, -.2)
 addLight('#f30', 20, 130, 15, -90, 30, -60,.3)
+
+addLight('#adf', 290, 140, .1, -50, -220, -190, 0)
+
+for (var i = 0; i < PI; i += PI/8) {
+	//addLight('#adf', 90, 2, 3, 0, 100*sin(i), 100*cos(i), .3)
+}
 
 canvas.className = 'anim3d'
 document.body.prepend(canvas);
