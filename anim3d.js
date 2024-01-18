@@ -1,4 +1,4 @@
-const model='./assets/hand2.glb'
+const model='./assets/hand3.glb'
 
 import {THREE, vec3} from './threeCustom.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
