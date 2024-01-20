@@ -63,7 +63,7 @@ document.body.prepend(canvas);
 
 camera.position.set(0, 25, 30);
 camera.lookAt(0,0,0);
-scene.rotation.set(-.5, -1.21, 0)
+scene.rotation.set(-4.13, -5.41, 0)
 
 
 let hand, arm, mesh; 
