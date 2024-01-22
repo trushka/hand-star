@@ -21,8 +21,8 @@ const
 	scene = new THREE.Scene(),
 	material = new THREE.MeshStandardMaterial({
 		color: '#fff',
-		roughness: .22,
-		metalness: .997,
+		roughness: .18,
+		metalness: 1,
 		emissive: new THREE.Color().multiplyScalar(-.08),
 		envMapIntensity: 1.3
 	}),
