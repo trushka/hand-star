@@ -1,5 +1,7 @@
 const model='./assets/hand3.glb',
-	envMap='./assets/map1.webp'
+	envMap='./assets/map1.webp',
+	bumpMap = './assets/bump.webp',
+	nMap = './assets/normal.webp'
 
 import {THREE, vec3} from './threeCustom.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -24,7 +26,10 @@ const
 		roughness: .18,
 		metalness: 1,
 		emissive: new THREE.Color().multiplyScalar(-.08),
-		envMapIntensity: 1.3
+		envMapIntensity: 1.3,
+		//normalMap: new THREE.TextureLoader().load(nMap),
+		bumpMap: new THREE.TextureLoader().load(bumpMap),
+		bumpScale: -2
 	}),
 	{PI, cos, sin}=Math,
 
