@@ -34,11 +34,12 @@ const
 	{PI, cos, sin}=Math,
 
 	lights = new THREE.Group(),
-	hLight = new THREE.AmbientLight( );
-	//hLight = new THREE.HemisphereLight('#def', '#000', 15);
+	//hLight = new THREE.AmbientLight( );
+	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
+material.color.b=1.5
 hLight.intencity=-1;
-scene.add(camera, lights)//hLight);
+scene.add(camera, lights, hLight);
 
 new THREE.TextureLoader().load(envMap, tex=>{
 	scene.environment = new THREE.PMREMGenerator(renderer)
@@ -55,20 +56,21 @@ addLight('#85f', 4, 120, 100, 0, 80, 10, 1.8)
 //addLight('#f3a', 38, 160, .5, 150, 70, 80, 5)
 addLight('#0ff', 360, 64, .8, 70, 80, -190, 2.5)
 //addLight('#af3', 100, 30, 15, 70, -80, 20, -.2)
-addLight('#f30', 30, 80, 15, -70, 10, -80,0)
+addLight('#f30', 90, 80, 15, -200, -200, -80 ,0)
 
 addLight('#adf', 210, 140, .1, -100, -220, -190, 0)
 
 for (var i = 0; i < PI; i += PI/8) {
 	//addLight('#adf', 90, 2, 3, 0, 100*sin(i), 100*cos(i), .3)
 }
+lights.rotation.set(-1.3, 7, -0.7);
 
 canvas.className = 'anim3d'
 document.body.prepend(canvas);
 
 camera.position.set(0, 25, 30);
 camera.lookAt(0,0,0);
-scene.rotation.set(-4.13, -5.41, 0)
+scene.rotation.set(1.9, 0.19, 0.52);
 
 
 let hand, arm, mesh; 
@@ -80,11 +82,12 @@ new GLTFLoader().load(model, obj=>{
 	hand = scene.getObjectByName('hand');
 	mesh = scene.getObjectByName('mesh');
 	arm = scene.getObjectByName('arm');
+	arm.rotation.set(-3.01, -0.34, -1.11)
 
 	mesh.material = material;
 	//mesh.geometry.computeVertexNormalsFine()
 
-	hand.rotation.set(-0.25, 0.32, 0);
+	hand.rotation.set(-0.01, 0.63, 0);
 	hand.position.y = -4.6
 
 	requestAnimationFrame(anim)
@@ -119,8 +122,8 @@ canvas.onmousemove=e=>{
         hand.rotation.y += e.movementX*.01
     }
     if (e.which>1) {
-        scene.rotation.x += e.movementY*.01
-        scene.rotation.y += e.movementX*.01
+        scene.rotateOnWorldAxis(vec3(0,1,0), e.movementX*.01)
+        scene.rotateX(e.movementY*.01)
         // hand.position.x += e.movementX*.03
         // hand.position.z += e.movementY*.03*(4-e.which)
         // if (e.which ==3) hand.position.y -= e.movementY*.03
