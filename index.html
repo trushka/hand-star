@@ -16,6 +16,8 @@
 	<style type="text/css">
 		body {
 			background: #030304;
+			color: #fff;
+			font-family: sans-serif;
 		}
 		.anim3d {
 			position: fixed;
@@ -24,9 +26,47 @@
 			width: 100%;
 			height: 100%;
 		}
+		.controls {
+			position: fixed;
+			top: 5px;
+			right: 5px;
+			background: #bbb4;
+			outline: #fff6 1px solid;
+			border-radius: 3px;
+			padding: .3em;
+			overflow: hidden;
+			backdrop-filter: blur(3px);
+		}
+		.controls::before {
+			float: right;
+			margin-left: .3em;
+			content: "▽";
+		}
+		.controls.hidden::before {
+			content: "▷";
+		}
+		.controls.hidden > div {
+			height: 0;
+			opacity: 0;
+		}
+		.controls textarea {
+			overflow-wrap: normal;
+			/* box-sizing: border-box; */
+			/* transition: width .5s; */
+		}
 	</style>
 </head>
 <body>
+	<form name="controls" onsubmit='return false' class="controls hidden" onpointerdown="if (event.target == this) this.classList.toggle('hidden')">
+		controls
+		<div>
+			<fieldset><legend>hand</legend>
+				<button onclick="hand.scale.set(1,1,1)">reset scale</button>
+
+			</fieldset><br>
+			<textarea name="code" ></textarea>
+		</div>
+	</form>
 
 </body>
 </html>

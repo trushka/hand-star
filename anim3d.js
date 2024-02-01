@@ -29,9 +29,9 @@ const
 		envMapIntensity: 1.3,
 		//normalMap: new THREE.TextureLoader().load(nMap),
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
-		bumpScale: -2
+		bumpScale: -3
 	}),
-	{PI, cos, sin}=Math,
+	{PI, cos, sin, abs}=Math,
 
 	lights = new THREE.Group(),
 	//hLight = new THREE.AmbientLight( );
@@ -70,7 +70,6 @@ document.body.prepend(canvas);
 
 camera.position.set(0, 25, 30);
 camera.lookAt(0,0,0);
-scene.rotation.set(1.9, 0.19, 0.52);
 
 
 let hand, arm, mesh; 
@@ -87,9 +86,13 @@ new GLTFLoader().load(model, obj=>{
 	mesh.material = material;
 	//mesh.geometry.computeVertexNormalsFine()
 
-	hand.rotation.set(-0.01, 0.63, 0);
-	hand.position.y = -4.6
-
+	//scene.rotation.set(1.9, 0.19, 0.52);
+	//hand.rotation.set(-0.01, 0.63, 0);
+	//hand.position.y = -4.6
+	hand.rotation.set(-0.32,0.33,0.28,"XYZ");
+	hand.position.set(9.78,-4.6,7.08);
+	hand.scale.set(0.87,0.87,0.87);
+	scene.rotation.set(2.33,1.23,-1.33,"XYZ");
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
 })
@@ -117,19 +120,51 @@ function anim(t) {
 
 //ajustment
 canvas.onmousemove=e=>{
+	if (!e.which) return;
     if (e.which==1) {
-        hand.rotation.x += e.movementY*.01
-        hand.rotation.y += e.movementX*.01
+		const {width, height} = canvas,
+			pos0 = scene.localToWorld(hand.position.clone()).project(camera).addScalar(1).multiply({x: width/2, y: height/2}),
+			pos = new THREE.Vector2( e.x, height - e.y ).sub(pos0),
+			r = pos.length(),
+			dPos = vec3(e.movementX, -e.movementY);
+
+		let ro = pos.angle() - pos.sub(dPos).angle(),
+			dr = r-pos.length();
+		if (abs(ro)>PI) ro = Math.sign(ro)*(abs(ro) - 2*PI);
+
+		console.log(ro, dr);
+		hand.rotateOnWorldAxis(camera.position.clone().sub(hand.position).normalize(), ro*THREE.MathUtils.smoothstep(r, 0, 250));
+        //hand.rotateOnWorldAxis(vec3(1,0,0), e.movementY*dr)
+        hand.rotateOnWorldAxis(vec3(-pos.y, pos.x).normalize().applyQuaternion(camera.quaternion), dr*.01)
     }
-    if (e.which>1) {
-        scene.rotateOnWorldAxis(vec3(0,1,0), e.movementX*.01)
-        scene.rotateX(e.movementY*.01)
-        // hand.position.x += e.movementX*.03
-        // hand.position.z += e.movementY*.03*(4-e.which)
+   if (e.which==2) {
+        scene.rotateOnAxis(vec3(0,1,0).applyQuaternion(camera.quaternion), -e.movementX*.003)
+        scene.rotateX(-e.movementY*.003)
         // if (e.which ==3) hand.position.y -= e.movementY*.03
     }
+    if (e.which==3) {
+        hand.position.x += e.movementX*.03
+        hand.position[e.shiftKey?'y':'z'] += e.movementY*(e.shiftKey?-.06:.03)
+    }
+    getCode()
 }
 canvas.onwheel=e=>{
-	camera.zoom *= 1 - e.deltaY*.001;
-	camera.updateProjectionMatrix()
+	hand.scale.multiplyScalar(1 - e.deltaY*.001);
+	getCode()
+}
+const {controls} = document, {code} = controls;
+controls.code.onfocus=function(){this.select()}
+
+function getCode(){
+	code.style='';
+	code.value = `
+		hand.rotation
+		hand.position
+		hand.scale
+		scene.rotation
+    `.replace(/^\s+/mg, '')
+     .replace(/\S+/g, str=>str+`.set(${eval(str).toArray().map(e=> isNaN(e)? '"'+e+'"' : +(+e).toFixed(2))});`);
+
+    code.style.width=code.scrollWidth+'px';
+    code.style.height=code.scrollHeight+'px';
 }
