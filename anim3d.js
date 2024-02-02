@@ -29,7 +29,8 @@ const
 		envMapIntensity: 1.3,
 		//normalMap: new THREE.TextureLoader().load(nMap),
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
-		bumpScale: -3
+		bumpScale: -4,
+		//normalScale: -.5
 	}),
 	{PI, cos, sin, abs}=Math,
 
@@ -42,8 +43,9 @@ hLight.intencity=-1;
 scene.add(camera, lights, hLight);
 
 new THREE.TextureLoader().load(envMap, tex=>{
-	scene.environment = new THREE.PMREMGenerator(renderer)
-	.fromEquirectangular(tex).texture
+	scene.environment = tex//new THREE.PMREMGenerator(renderer)
+	//.fromEquirectangular(tex).texture
+	tex.mapping = THREE.EquirectangularReflectionMapping
 }).colorSpace='srgb';
 
 //renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -90,11 +92,11 @@ new GLTFLoader().load(model, obj=>{
 	//hand.rotation.set(-0.01, 0.63, 0);
 	//hand.position.y = -4.6
 
-	hand.rotation.set(-0.21,0.25,0.14,"XYZ");
-	hand.position.set(7.11,-4.6,6.84);
-	hand.scale.set(0.88,0.88,0.88);
-	scene.rotation.set(0.39,0.44,-1.89,"XYZ");
-	
+	hand.rotation.set(-0.01,0.42,0.06,"XYZ");
+	hand.position.set(5.61,-3.82,6.93);
+	hand.scale.set(0.92,0.92,0.92);
+	scene.rotation.set(-0.15,1.43,1.37,"XYZ");
+
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
 })
@@ -165,7 +167,7 @@ function getCode(){
 		hand.scale
 		scene.rotation
     `.replace(/^\s+/mg, '')
-     .replace(/\S+/g, str=>str+`.set(${eval(str).toArray().map(e=> isNaN(e)? '"'+e+'"' : +(+e).toFixed(2))});`);
+     .replace(/\S+/g, str=>`	${str}.set(${eval(str).toArray().map(e=> isNaN(e)? '"'+e+'"' : +(+e).toFixed(2))});`);
 
     code.style.width=code.scrollWidth+'px';
     code.style.height=code.scrollHeight+'px';
