@@ -1,6 +1,6 @@
 const model='./assets/hand3.glb',
 	envMap='./assets/map1.webp',
-	bumpMap = './assets/bump.webp',
+	bumpMap = './assets/bump1.webp',
 	nMap = './assets/normal.webp'
 
 import {THREE, vec3} from './threeCustom.js';
@@ -89,10 +89,12 @@ new GLTFLoader().load(model, obj=>{
 	//scene.rotation.set(1.9, 0.19, 0.52);
 	//hand.rotation.set(-0.01, 0.63, 0);
 	//hand.position.y = -4.6
-	hand.rotation.set(-0.32,0.33,0.28,"XYZ");
-	hand.position.set(9.78,-4.6,7.08);
-	hand.scale.set(0.87,0.87,0.87);
-	scene.rotation.set(2.33,1.23,-1.33,"XYZ");
+
+	hand.rotation.set(-0.21,0.25,0.14,"XYZ");
+	hand.position.set(7.11,-4.6,6.84);
+	hand.scale.set(0.88,0.88,0.88);
+	scene.rotation.set(0.39,0.44,-1.89,"XYZ");
+	
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
 })
@@ -133,9 +135,9 @@ canvas.onmousemove=e=>{
 		if (abs(ro)>PI) ro = Math.sign(ro)*(abs(ro) - 2*PI);
 
 		console.log(ro, dr);
-		hand.rotateOnWorldAxis(camera.position.clone().sub(hand.position).normalize(), ro*THREE.MathUtils.smoothstep(r, 0, 250));
+        if (!e.shiftKey) hand.rotateOnWorldAxis(vec3(-pos.y, pos.x).normalize().applyQuaternion(camera.quaternion), dr*.01)
+		hand.rotateOnWorldAxis(camera.position.clone().sub(hand.position).normalize(), ro*THREE.MathUtils.smoothstep(r, 0, 350));
         //hand.rotateOnWorldAxis(vec3(1,0,0), e.movementY*dr)
-        hand.rotateOnWorldAxis(vec3(-pos.y, pos.x).normalize().applyQuaternion(camera.quaternion), dr*.01)
     }
    if (e.which==2) {
         scene.rotateOnAxis(vec3(0,1,0).applyQuaternion(camera.quaternion), -e.movementX*.003)
