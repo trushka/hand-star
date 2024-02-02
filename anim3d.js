@@ -92,10 +92,10 @@ new GLTFLoader().load(model, obj=>{
 	//hand.rotation.set(-0.01, 0.63, 0);
 	//hand.position.y = -4.6
 
-	hand.rotation.set(-0.01,0.42,0.06,"XYZ");
+	hand.rotation.set(-0.04,0.3,0.11,"XYZ");
 	hand.position.set(5.61,-3.82,6.93);
-	hand.scale.set(0.92,0.92,0.92);
-	scene.rotation.set(-0.15,1.43,1.37,"XYZ");
+	hand.scale.set(0.88,0.88,0.88);
+	scene.rotation.set(1.62,1.34,-0.48,"XYZ");
 
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
