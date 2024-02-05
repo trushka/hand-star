@@ -29,7 +29,7 @@ const
 		envMapIntensity: 1.3,
 		//normalMap: new THREE.TextureLoader().load(nMap),
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
-		bumpScale: -4,
+		bumpScale: -3,
 		//normalScale: -.5
 	}),
 	{PI, cos, sin, abs}=Math,
@@ -92,10 +92,10 @@ new GLTFLoader().load(model, obj=>{
 	//hand.rotation.set(-0.01, 0.63, 0);
 	//hand.position.y = -4.6
 
-	hand.rotation.set(-0.04,0.3,0.11,"XYZ");
-	hand.position.set(5.61,-3.82,6.93);
-	hand.scale.set(0.88,0.88,0.88);
-	scene.rotation.set(1.62,1.34,-0.48,"XYZ");
+	hand.rotation.set(-0.09,0.44,-0.02,"XYZ");
+	hand.position.set(2.49,-3.82,6.87);
+	//hand.scale.set(1.07,1.07,1.07);
+	scene.rotation.set(2.24,-0.1,1.19,"XYZ");
 
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
