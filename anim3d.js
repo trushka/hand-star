@@ -29,7 +29,7 @@ const
 		envMapIntensity: 1.3,
 		//normalMap: new THREE.TextureLoader().load(nMap),
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
-		bumpScale: -3,
+		bumpScale: -3.5,
 		//normalScale: -.5
 	}),
 	{PI, cos, sin, abs}=Math,
@@ -38,9 +38,9 @@ const
 	//hLight = new THREE.AmbientLight( );
 	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
-material.color.b=1.5
+material.color.b=1.4
 hLight.intencity=-1;
-scene.add(camera, lights, hLight);
+scene.add(camera, lights);//, hLight);
 
 new THREE.TextureLoader().load(envMap, tex=>{
 	scene.environment = tex//new THREE.PMREMGenerator(renderer)
@@ -54,25 +54,25 @@ hLight.position.set(0, -2.5, 3).normalize()
 
 RectAreaLightUniformsLib.init();
 
-addLight('#85f', 4, 120, 100, 0, 80, 10, 1.8)
+//addLight('#85f', 4, 120, 100, 0, 80, 10, 1.8)
 //addLight('#f3a', 38, 160, .5, 150, 70, 80, 5)
-addLight('#0ff', 360, 64, .8, 70, 80, -190, 2.5)
+addLight('#0ff', 900, 900, .16, 0, 0, -200, PI/4)
 //addLight('#af3', 100, 30, 15, 70, -80, 20, -.2)
-addLight('#f30', 90, 80, 15, -200, -200, -80 ,0)
+//addLight('#f30', 90, 80, 15, -200, -200, -80 ,0)
 
-addLight('#adf', 210, 140, .1, -100, -220, -190, 0)
+addLight('#adf', 900, 900, .13, 0, 0, -200)
 
 for (var i = 0; i < PI; i += PI/8) {
 	//addLight('#adf', 90, 2, 3, 0, 100*sin(i), 100*cos(i), .3)
 }
-lights.rotation.set(-1.3, 7, -0.7);
+//lights.rotation.set(-1.3, 7, -0.7);
 
 canvas.className = 'anim3d'
 document.body.prepend(canvas);
 
 camera.position.set(0, 25, 30);
 camera.lookAt(0,0,0);
-
+lights.lookAt(camera.position)
 
 let hand, arm, mesh; 
 
@@ -92,10 +92,10 @@ new GLTFLoader().load(model, obj=>{
 	//hand.rotation.set(-0.01, 0.63, 0);
 	//hand.position.y = -4.6
 
-	hand.rotation.set(-0.09,0.44,-0.02,"XYZ");
+	hand.rotation.set(-0.13,0.91,0.29,"XYZ");
 	hand.position.set(2.49,-3.82,6.87);
-	//hand.scale.set(1.07,1.07,1.07);
-	scene.rotation.set(2.24,-0.1,1.19,"XYZ");
+	hand.scale.set(1.1,1.1,1.1);
+	scene.rotation.set(1.81,-0.1,0.79,"XYZ");
 
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
