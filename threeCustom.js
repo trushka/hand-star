@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
-export const vec3=function(x,y,z) {return new THREE.Vector3(x,y,z)};
+export const vec3 = (x,y,z) => new THREE.Vector3(x,y,z);
+export const vec2 = (x,y) => new THREE.Vector2(x,y);
 export {THREE};
 
 THREE.Vector3.prototype.rotate=function(x,y,z,t){
@@ -8,6 +9,8 @@ THREE.Vector3.prototype.rotate=function(x,y,z,t){
 };
 
 THREE.BufferGeometry.prototype.computeVertexNormalsFine = function () {
+
+	const doubles = [];
 
 	var index = this.index;
 	var attributes = this.attributes;

@@ -24,9 +24,9 @@ const
 	material = new THREE.MeshStandardMaterial({
 		color: '#fff',
 		roughness: .18,
-		metalness: 1,
-		emissive: new THREE.Color().multiplyScalar(-.08),
-		envMapIntensity: 1.3,
+		metalness: .9,
+		emissive: new THREE.Color().multiplyScalar(-.4),
+		envMapIntensity: 1.9,
 		//normalMap: new THREE.TextureLoader().load(nMap),
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
 		bumpScale: -3.5,
@@ -38,9 +38,9 @@ const
 	//hLight = new THREE.AmbientLight( );
 	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
-material.color.b=1.4
+material.color.b=1.5
 hLight.intencity=-1;
-scene.add(camera, lights);//, hLight);
+scene.add(camera);//, lights, hLight);
 
 new THREE.TextureLoader().load(envMap, tex=>{
 	scene.environment = tex//new THREE.PMREMGenerator(renderer)
@@ -56,11 +56,11 @@ RectAreaLightUniformsLib.init();
 
 //addLight('#85f', 4, 120, 100, 0, 80, 10, 1.8)
 //addLight('#f3a', 38, 160, .5, 150, 70, 80, 5)
-addLight('#0ff', 900, 900, .16, 0, 0, -200, PI/4)
+addLight('#f8b', 900, 900, .16, 0, 0, -200, PI/4)
 //addLight('#af3', 100, 30, 15, 70, -80, 20, -.2)
 //addLight('#f30', 90, 80, 15, -200, -200, -80 ,0)
 
-addLight('#adf', 900, 900, .13, 0, 0, -200)
+addLight('#f8b', 900, 900, .13, 0, 0, -200)
 
 for (var i = 0; i < PI; i += PI/8) {
 	//addLight('#adf', 90, 2, 3, 0, 100*sin(i), 100*cos(i), .3)
@@ -93,9 +93,9 @@ new GLTFLoader().load(model, obj=>{
 	//hand.position.y = -4.6
 
 	hand.rotation.set(-0.13,0.91,0.29,"XYZ");
-	hand.position.set(2.49,-3.82,6.87);
-	hand.scale.set(1.1,1.1,1.1);
-	scene.rotation.set(1.81,-0.1,0.79,"XYZ");
+	hand.position.set(2.4,-1.6,8.31);
+	hand.scale.set(1,1,1);
+	scene.rotation.set(0.39,-0.4,-0.32,"XYZ");
 
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})

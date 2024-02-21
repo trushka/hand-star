@@ -55,6 +55,9 @@
 			/* transition: width .5s; */
 			white-space: nowrap;
 		}
+		.controls [type=range] {
+			width: 300px;
+		}
 	</style>
 </head>
 <body>
@@ -64,6 +67,13 @@
 			<fieldset><legend>hand</legend>
 				<button onclick="hand.scale.set(1,1,1)">reset scale</button>
 
+			</fieldset><br>
+			<fieldset><legend>light</legend>
+				<input type="checkbox" name="lcontrol">
+				<input type="color" name="lcolor"><br>
+				width: <input type="range" name="lwidth" max="1000"><br>
+				height: <input type="range" name="lheight" max="1000"><br>
+				light: <input type="range" name="lintensity" max="20" step=".01">
 			</fieldset><br>
 			<textarea name="code" ></textarea>
 		</div>
