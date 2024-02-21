@@ -24,7 +24,7 @@ const
 	material = new THREE.MeshStandardMaterial({
 		color: '#fff',
 		roughness: .18,
-		metalness: .9,
+		metalness: .85,
 		emissive: new THREE.Color().multiplyScalar(-.4),
 		envMapIntensity: 1.9,
 		//normalMap: new THREE.TextureLoader().load(nMap),
@@ -38,7 +38,7 @@ const
 	//hLight = new THREE.AmbientLight( );
 	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
-material.color.b=1.5
+material.color.b=1.4
 hLight.intencity=-1;
 scene.add(camera);//, lights, hLight);
 
@@ -95,7 +95,7 @@ new GLTFLoader().load(model, obj=>{
 	hand.rotation.set(-0.13,0.91,0.29,"XYZ");
 	hand.position.set(2.4,-1.6,8.31);
 	hand.scale.set(1,1,1);
-	scene.rotation.set(0.39,-0.4,-0.32,"XYZ");
+	scene.rotation.set(-2.1,0.66,2.15,"XYZ");
 
 	requestAnimationFrame(anim)
 	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
