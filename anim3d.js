@@ -6,31 +6,34 @@ const model='./assets/hand3.glb',
 import {THREE, vec3} from './threeCustom.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
-import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+//import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+//import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
-function addLight(color, w, h, power, x, y, z, ro=0) {
-	const light = new THREE.RectAreaLight(color, power*1.6, w*3, h*3);
-	light.position.set(x,y,z).multiplyScalar(3);
+function addLight(x=0, y=0, z=1, color, power) {
+	const light = new THREE.DirectionalLight(color, power);
+	light.position.set(x,y,z);
+	const i=lights.children.length;
 	lights.add(light);
-	light.lookAt(0,0,0)
-	light.rotateZ(ro);
+	document.querySelector('.lights').innerHTML += `<input type="radio" name="light" value=${i}>`
 }
 const
 	renderer = new THREE.WebGLRenderer( {alpha:true, antialias:true} ),
 	canvas = renderer.domElement,
 	camera=new THREE.PerspectiveCamera( 40, 1, .1, 1000 ),
 	scene = new THREE.Scene(),
-	material = new THREE.MeshStandardMaterial({
-		color: '#fff',
-		roughness: .18,
-		metalness: .85,
-		emissive: new THREE.Color().multiplyScalar(-.4),
-		envMapIntensity: 1.9,
-		//normalMap: new THREE.TextureLoader().load(nMap),
+	material = new THREE.MeshPhysicalMaterial({
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
+
+		color: '#4a47ff',
+		roughness: 0.2,
+		metalness: 0.95,
 		bumpScale: -3.5,
-		//normalScale: -.5
+		envMapIntensity: 30,
+		sheenColor: '#eb00b8',
+		sheenRoughness: 0.3,
+		specularIntensity: 30,
+		specularColor: '#f2acfb',
+		sheen: 1,
 	}),
 	{PI, cos, sin, abs}=Math,
 
@@ -38,9 +41,17 @@ const
 	//hLight = new THREE.AmbientLight( );
 	hLight = new THREE.HemisphereLight('#def', '#000', 15);
 
-material.color.b=1.4
-hLight.intencity=-1;
-scene.add(camera);//, lights, hLight);
+hLight.intensity=-1;
+scene.add(camera, lights);//, hLight);
+material.emissive.set(-.01, -.01, -.01)
+
+addLight(-0.41, 0.90, 0.16, '#6bff7c', 7.1)
+addLight(-0.21, 0.97, 0.12, '#02f23e', 5.42)
+addLight(-0.62, -0.65, 0.44, '#4efb4b', 6.44)
+addLight(0.67, -0.22, 0.71, '#f3ff52', 2.91)
+addLight(0.50, 0.71, 0.50, '#29ff74', 5.82)
+addLight(-0.47, 0.75, 0.46, '#fff36b', 1.37)
+addLight(0.66, 0.33, -0.67, '#e76e6e', 0.63)
 
 new THREE.TextureLoader().load(envMap, tex=>{
 	scene.environment = tex//new THREE.PMREMGenerator(renderer)
@@ -52,20 +63,7 @@ new THREE.TextureLoader().load(envMap, tex=>{
 
 hLight.position.set(0, -2.5, 3).normalize()
 
-RectAreaLightUniformsLib.init();
-
-//addLight('#85f', 4, 120, 100, 0, 80, 10, 1.8)
-//addLight('#f3a', 38, 160, .5, 150, 70, 80, 5)
-addLight('#f8b', 900, 900, .16, 0, 0, -200, PI/4)
-//addLight('#af3', 100, 30, 15, 70, -80, 20, -.2)
-//addLight('#f30', 90, 80, 15, -200, -200, -80 ,0)
-
-addLight('#f8b', 900, 900, .13, 0, 0, -200)
-
-for (var i = 0; i < PI; i += PI/8) {
-	//addLight('#adf', 90, 2, 3, 0, 100*sin(i), 100*cos(i), .3)
-}
-//lights.rotation.set(-1.3, 7, -0.7);
+//RectAreaLightUniformsLib.init();
 
 canvas.className = 'anim3d'
 document.body.prepend(canvas);
@@ -95,10 +93,10 @@ new GLTFLoader().load(model, obj=>{
 	hand.rotation.set(-0.13,0.91,0.29,"XYZ");
 	hand.position.set(2.4,-1.6,8.31);
 	hand.scale.set(1,1,1);
-	scene.rotation.set(-2.1,0.66,2.15,"XYZ");
+	scene.rotation.set(-1.54,0.24,0.09,"XYZ");
 
 	requestAnimationFrame(anim)
-	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, hLight, lights})
+	Object.assign(window, {scene,camera, renderer, THREE, hand, arm, mesh, material, hLight, lights, addLight})
 })
 
 function resize() {
@@ -123,9 +121,15 @@ function anim(t) {
 }
 
 //ajustment
+window.curLight = '';
+
 canvas.onmousemove=e=>{
 	if (!e.which) return;
     if (e.which==1) {
+    	curLight.position.applyEuler(new THREE.Euler(e.movementY*.003, e.movementX*.003), 0)
+
+    	return getCode('l')
+
 		const {width, height} = canvas,
 			pos0 = scene.localToWorld(hand.position.clone()).project(camera).addScalar(1).multiply({x: width/2, y: height/2}),
 			pos = new THREE.Vector2( e.x, height - e.y ).sub(pos0),
@@ -159,9 +163,32 @@ canvas.onwheel=e=>{
 const {controls} = document, {code} = controls;
 controls.code.onfocus=function(){this.select()}
 
-function getCode(){
-	code.style='';
-	code.value = `
+controls.oninput=e=>{
+	const {lcolor, lpower, light} = controls;
+	if (e.target.name=='light'){
+		curLight = lights.children[light.value]
+		lcolor.value = '#'+curLight.color.getHexString();
+		lpower.value = curLight.intensity
+	}
+	if (!curLight) return;
+	if (e.target == lcolor) curLight.color.setStyle(lcolor.value);
+	if (e.target == lpower) curLight.intensity = lpower.value;
+	getCode('l')
+}
+
+['color', 'sheenColor', 'specularColor'].forEach(prop=>{
+	const color = material[prop], inp=document.createElement('input');
+	document.querySelector('.colors').append(inp);
+	inp.type="color";
+	inp.name=inp.title=prop;
+	inp.value='#'+color.getHexString();
+	inp.oninput = inp.onfocus = e=> {color.setStyle(inp.value); getCode('m'); return false}
+})
+
+function getCode(type){
+	code.style.width='';
+	code.value = '';
+	if (!type) code.value = `
 		hand.rotation
 		hand.position
 		hand.scale
@@ -169,6 +196,19 @@ function getCode(){
     `.replace(/^\s+/mg, '')
      .replace(/\S+/g, str=>`	${str}.set(${eval(str).toArray().map(e=> isNaN(e)? '"'+e+'"' : +(+e).toFixed(2))});`);
 
-    code.style.width=code.scrollWidth+'px';
-    code.style.height=code.scrollHeight+'px';
+    if (type=='l') lights.children.forEach(light=>{
+    	code.value+=`\naddLight(${light.position.toArray().map(val=>val.toFixed(2)).join(', ')}, '#${light.color.getHexString()}', ${light.intensity})`
+    })
+
+    const getVal = val=> +val||`'#${val?.getHexString?.()}'`;
+    if (type=='m') for (let key in material) {
+    	if (key=='version') continue;
+    	
+    	const val = getVal(material[key=key.replace('_', '')]);
+    	if (val != getVal(mat0[key])) code.value+=`		${key}: ${val},\n`
+    }
+
+    code.style.width=code.scrollWidth-code.clientWidth+code.offsetWidth+'px';
+    //code.style.height=code.scrollHeight+'px';
 }
+const mat0=new THREE.MeshPhysicalMaterial()

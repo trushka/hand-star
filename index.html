@@ -68,14 +68,14 @@
 				<button onclick="hand.scale.set(1,1,1)">reset scale</button>
 
 			</fieldset><br>
-			<fieldset><legend>light</legend>
-				<input type="checkbox" name="lcontrol">
-				<input type="color" name="lcolor"><br>
-				width: <input type="range" name="lwidth" max="1000"><br>
-				height: <input type="range" name="lheight" max="1000"><br>
-				light: <input type="range" name="lintensity" max="20" step=".01">
+			<fieldset class="colors"><legend>material colors</legend>
+			</fieldset>
+
+			<fieldset class='lights'><legend>lights</legend>
+				<input type="color" name="lcolor">
+				<input type="range" name="lpower" max=10 step=.01><br>
 			</fieldset><br>
-			<textarea name="code" ></textarea>
+			<textarea name="code" rows="5"></textarea>
 		</div>
 	</form>
 
