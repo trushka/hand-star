@@ -24,14 +24,14 @@ const
 	material = new THREE.MeshPhysicalMaterial({
 		bumpMap: new THREE.TextureLoader().load(bumpMap),
 
-		color: '#4a47ff',
+		color: '#7b61ff',
 		roughness: 0.2,
-		metalness: 0.95,
+		metalness: 0.9,
 		bumpScale: -3.5,
 		envMapIntensity: 30,
 		sheenColor: '#eb00b8',
 		sheenRoughness: 0.3,
-		specularIntensity: 30,
+		specularIntensity: 15,
 		specularColor: '#f2acfb',
 		sheen: 1,
 	}),
@@ -43,7 +43,7 @@ const
 
 hLight.intensity=-1;
 scene.add(camera, lights);//, hLight);
-material.emissive.set(-.01, -.01, -.01)
+material.emissive.set(-.04, -.04, -.04)
 
 addLight(-0.41, 0.90, 0.16, '#6bff7c', 7.1)
 addLight(-0.21, 0.97, 0.12, '#02f23e', 5.42)
